@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { GENAI_API_KEY } from "@/lib/utils/constants";
 
-const genAI = new GoogleGenerativeAI(GENAI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GENAI_API_KEY);
 
 export async function summarizeWithGemini(content: string): Promise<string> {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
