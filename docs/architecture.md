@@ -11,20 +11,24 @@ flowchart LR
     C -->|Requests| ChatWidget[ChatWidget]
   end
 
-  BT -->|Edge POST| TrackAPI[/api/track (Edge)/]
+  %% Added quotes to the label below
+  BT -->|Edge POST| TrackAPI[/"/api/track (Edge)"/]
   TrackAPI --> DB[(Neon PostgreSQL)]
 
-  C -->|Chat| ChatAPI[/api/chat (30s)/]
+  %% Added quotes to the label below
+  C -->|Chat| ChatAPI[/"/api/chat (30s)"/]
   ChatAPI --> AI[Groq/OpenRouter]
   ChatAPI --> DB
 
-  CronJob[/Daily Cron - /api/cron/aggregate/] -->|Aggregate| DB
+  %% Added quotes to the label below
+  CronJob[/"Daily Cron - /api/cron/aggregate"/] -->|Aggregate| DB
   CronJob -->|Upsert| Aggregated[aggregated_behaviors]
 
-  NotionWebhook[/Notion Webhook -> /api/notion/revalidate/] -->|Revalidate| RevalidateAPI[/api/notion/revalidate/]
+  %% Added quotes to the labels below
+  NotionWebhook[/"Notion Webhook -> /api/notion/revalidate"/] -->|Revalidate| RevalidateAPI[/"/api/notion/revalidate"/]
   RevalidateAPI --> NextCache[Next.js revalidate endpoints]
 
-  UploadThing --> UploadAPI[/api/uploadthing/]
+  UploadThing --> UploadAPI[/"/api/uploadthing"/]
   UploadAPI --> DB
   UploadAPI --> UploadStorage[(UploadThing/Cdn)]
 
