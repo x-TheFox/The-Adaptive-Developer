@@ -219,23 +219,24 @@ export async function POST(request: NextRequest) {
 
         // Process each tool call
         for (const toolCall of assistantMessage.tool_calls) {
-          // Normalize function name (strip any 'f ' prefixes) to match our handler
-          const fnName = (toolCall.function.name || '').replace(/^f\s+/, '');
-          if (toolCall.type === 'function' && fnName === 'fetch_project_code') {
-            const args = JSON.parse(toolCall.function.arguments);
-            const repoName = args.repo_name;
-            
-            console.log(`Tool call: fetch_project_code for "${repoName}"`);
-            
-            // Fetch and summarize the code
-            const codeSummary = await fetchProjectCode(repoName, githubUsername);
-            
-            // Add tool result to messages
-            fullMessages.push({
-              role: 'tool',
-              tool_call_id: toolCall.id,
-              content: codeSummary,
-            });
+          if (toolCall.type === 'function' && 'function' in toolCall && toolCall.function) {
+            const fnName = (toolCall.function.name || '').replace(/^f\s+/, '');
+            if (fnName === 'fetch_project_code') {
+              const args = JSON.parse(toolCall.function.arguments);
+              const repoName = args.repo_name;
+              
+              console.log(`Tool call: fetch_project_code for "${repoName}"`);
+              
+              // Fetch and summarize the code
+              const codeSummary = await fetchProjectCode(repoName, githubUsername);
+              
+              // Add tool result to messages
+              fullMessages.push({
+                role: 'tool',
+                tool_call_id: toolCall.id,
+                content: codeSummary,
+              });
+            }
           }
         }
         
