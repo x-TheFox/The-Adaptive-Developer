@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
@@ -95,6 +96,7 @@ export default function RootLayout({
           {/* Dev Tools (only in development) */}
           <DevTools />
         </PersonaProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
