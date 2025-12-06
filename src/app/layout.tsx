@@ -53,6 +53,14 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Explicitly configure the site's icons to ensure the browser uses
+  // /favicon.ico instead of any image in /public that might otherwise be
+  // used as the favicon (e.g. vercel.svg).
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
 export const viewport: Viewport = {
@@ -69,6 +77,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // FEATURE FLAG: The ChatWidget is disabled by default. To temporarily re-enable set
+  // the environment variable NEXT_PUBLIC_CHAT_ENABLED=true, then rebuild.
+  // This avoids shipping the chat to users in case we need it off temporarily.
+  const CHAT_ENABLED = process.env.NEXT_PUBLIC_CHAT_ENABLED === 'true';
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -91,8 +103,8 @@ export default function RootLayout({
           {/* Mobile Desktop Prompt */}
           <MobilePrompt />
 
-          {/* AI Chat Widget */}
-          <ChatWidget />
+          {/* AI Chat Widget (temporarily disabled by default) */}
+          {CHAT_ENABLED && <ChatWidget />}
 
           {/* Dev Tools (only in development) */}
           <DevTools />

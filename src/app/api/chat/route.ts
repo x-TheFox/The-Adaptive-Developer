@@ -141,6 +141,12 @@ function trimMessagesToFitContext(
 }
 
 export async function POST(request: NextRequest) {
+  // Temporarily disable chat API when not explicitly enabled via env.
+  // This preserves the server-side API but prevents it from processing requests
+  // while the chat system is being disabled for maintenance or testing.
+  if (process.env.NEXT_PUBLIC_CHAT_ENABLED !== 'true') {
+    return new Response('Chat API temporarily disabled', { status: 503 });
+  }
   try {
     const body: ChatRequest = await request.json();
     const { 
