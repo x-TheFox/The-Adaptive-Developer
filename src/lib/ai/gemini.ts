@@ -4,7 +4,7 @@ import { GENAI_API_KEY } from "@/lib/utils/constants";
 const genAI = new GoogleGenerativeAI(GENAI_API_KEY);
 
 export async function summarizeWithGemini(content: string): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const prompt = `You are a code summarizer. Given the following repository data, create a concise technical summary that includes:
 1. Repository structure (key directories and their purpose)
