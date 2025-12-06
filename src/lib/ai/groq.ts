@@ -17,7 +17,7 @@ export const GROQ_MODELS = {
 } as const;
 
 // Default model for chatbot (fastest)
-export const DEFAULT_GROQ_MODEL = GROQ_MODELS.FAST;
+export const DEFAULT_GROQ_MODEL = GROQ_MODELS.QUALITY;
 
 // Check if Groq is configured
 export function isGroqConfigured(): boolean {
