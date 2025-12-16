@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getProjectBySlug, getAllProjectSlugs, getProjects } from '@/lib/notion/projects';
 import { NotionRenderer } from '@/components/notion';
+import { RepoCard } from '@/components/projects/RepoCard';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Github, Sparkles, Users } from 'lucide-react';
@@ -44,7 +45,8 @@ export default async function ProjectPage({
   let repoMeta = null;
   if (project.githubUrl) {
     try {
-      const meta = await import('@/lib/github').then(m => m.fetchRepoMetaFromUrl(project.githubUrl));
+      const githubUrl = project.githubUrl as string;
+      const meta = await import('@/lib/github').then(m => m.fetchRepoMetaFromUrl(githubUrl));
       repoMeta = meta;
     } catch (err) {
       // Ignore fetch errors - we'll render a simple link instead
@@ -162,9 +164,8 @@ export default async function ProjectPage({
         )}
         {/* GitHub repo preview */}
         {project.githubUrl && (
-          // @ts-expect-error server component import
           <div className="mt-8">
-            <RepoCard githubUrl={project.githubUrl} repo={repoMeta} />
+            <RepoCard githubUrl={project.githubUrl} repo={repoMeta ?? undefined} />
           </div>
         )}      </article>
 
