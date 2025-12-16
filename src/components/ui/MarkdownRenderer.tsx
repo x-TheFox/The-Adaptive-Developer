@@ -5,6 +5,16 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeHighlight from 'rehype-highlight';
+import dynamic from 'next/dynamic';
+
+// Dynamically import MermaidDiagram to avoid SSR issues
+const MermaidDiagram = dynamic(
+  () => import('@/components/ui/MermaidDiagram').then(mod => mod.MermaidDiagram),
+  {
+    ssr: false,
+    loading: () => <div className="text-zinc-500">Loading diagram...</div>,
+  }
+);
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { cn } from '@/lib/utils';
@@ -15,7 +25,34 @@ interface MarkdownRendererProps {
   compact?: boolean;
 }
 
+export function sanitizeContent(input: string) {
+  if (!input) return input;
+
+  function replaceAngleBrackets(s: string) {
+    return s
+      .replace(/\\u003c/g, '\\lt')
+      .replace(/\\u003e/g, '\\gt')
+      .replace(/&lt;|&#60;|&#x3c;/gi, '\\lt')
+      .replace(/&gt;|&#62;|&#x3e;/gi, '\\gt')
+      .replace(/</g, '\\lt')
+      .replace(/>/g, '\\gt');
+  }
+
+  // Replace < and > inside inline and block math (handles $$ and $)
+  const mathFixed = input.replace(/(\${1,2})([\s\S]*?)\1/gm, (_match, delim, body) => {
+    const fixedBody = replaceAngleBrackets(body);
+    return `${delim}${fixedBody}${delim}`;
+  });
+
+  // Unescape \\.(backslash dot) in headings so "#### 2\\. Title" becomes "#### 2. Title"
+  const headingFixed = mathFixed.replace(/(^|\n)(#{1,6}\s[^\n]*?)\\\./g, '$1$2.');
+
+  return headingFixed;
+}
+
 export function MarkdownRenderer({ content, className, compact = false }: MarkdownRendererProps) {
+  const safeContent = sanitizeContent(content);
+
   return (
     <div
       className={cn(
@@ -78,12 +115,19 @@ export function MarkdownRenderer({ content, className, compact = false }: Markdo
                 </code>
               );
             }
+            const match = /language-(\w+)/.exec(className || '');
+            const lang = match?.[1];
+            const codeText = String(children).replace(/\n$/, '');
+            if (lang === 'mermaid') {
+              return <MermaidDiagram chart={codeText} />;
+            }
             return (
               <code className={cn(className, 'font-mono text-sm')}>
                 {children}
               </code>
             );
           },
+
           blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-cyan-500/50 pl-4 italic text-zinc-400 bg-zinc-800/20 rounded-r-lg py-2 animate-fadeIn">
               {children}
@@ -133,7 +177,7 @@ export function MarkdownRenderer({ content, className, compact = false }: Markdo
           ),
         }}
       >
-        {content}
+        {safeContent}
       </ReactMarkdown>
     </div>
   );
