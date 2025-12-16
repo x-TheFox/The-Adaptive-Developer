@@ -107,7 +107,7 @@ export function ProjectsGrid({ projects, className }: ProjectsGridProps) {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold gradient-text-animated mb-4">
             {sectionTitles[persona]}
           </h2>
           <p className="text-zinc-400 text-lg">
@@ -185,12 +185,12 @@ function ProjectCard({ project, config, index, isAdapting }: ProjectCardProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
-        'group relative bg-zinc-900/50 rounded-xl overflow-hidden',
-        'border transition-all duration-300',
-        'hover:shadow-xl hover:shadow-zinc-900/50',
+        'group relative glass rounded-xl overflow-hidden',
+        'transition-all duration-500',
+        'hover:shadow-2xl',
         project.featured 
-          ? 'border-yellow-500/50 hover:border-yellow-400 ring-1 ring-yellow-500/20' 
-          : 'border-zinc-800/50 hover:border-zinc-600'
+          ? 'border-yellow-500/50 hover:border-yellow-400 ring-1 ring-yellow-500/20 hover:shadow-yellow-500/10' 
+          : 'hover:border-cyan-500/30 hover:shadow-cyan-500/10'
       )}
     >
       {/* Featured badge */}
@@ -234,7 +234,7 @@ function ProjectCard({ project, config, index, isAdapting }: ProjectCardProps) {
         </span>
 
         {/* Title */}
-        <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
+        <h3 className="text-lg font-semibold text-white mb-2 group-hover:gradient-text transition-all duration-300">
           <a href={`/projects/${project.slug}`} data-track={`project-${project.slug}`}>
             {project.title}
           </a>

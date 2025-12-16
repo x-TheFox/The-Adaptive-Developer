@@ -96,10 +96,13 @@ export function Footer({ profile, className }: FooterProps) {
 
       <footer
         className={cn(
-          'relative py-16 px-6 bg-zinc-950 border-t border-zinc-800',
+          'relative py-16 px-6 bg-zinc-950 border-t border-zinc-800 overflow-hidden',
           className
         )}
       >
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl" />
       <div className="max-w-6xl mx-auto">
         {/* Main footer content */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
@@ -109,7 +112,7 @@ export function Footer({ profile, className }: FooterProps) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-2xl font-bold text-white"
+              className="text-2xl font-bold gradient-text"
             >
               &lt;{profile?.name || 'Sam'}/&gt;
             </motion.div>
@@ -149,7 +152,7 @@ export function Footer({ profile, className }: FooterProps) {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm font-medium text-white transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 rounded-lg text-sm font-medium text-white transition-all duration-300 shadow-lg shadow-cyan-500/25"
                 >
                   <Download className="w-4 h-4" />
                   Download

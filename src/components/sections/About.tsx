@@ -126,17 +126,22 @@ export function About({
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="relative p-8 md:p-12 rounded-2xl bg-zinc-900/50 border border-zinc-800 backdrop-blur-sm"
+          className="relative p-8 md:p-12 rounded-2xl glass hover:border-cyan-500/30 transition-all duration-500 group"
         >
           {/* Decorative corner accent */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-tr-2xl" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan-500/10 via-purple-500/5 to-transparent rounded-tr-2xl group-hover:from-cyan-500/20 transition-all duration-500" />
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/10 to-transparent rounded-bl-2xl group-hover:from-purple-500/20 transition-all duration-500" />
           
           {/* Header with icon */}
           <div className="flex items-center gap-3 mb-8">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400">
+            <motion.div 
+              className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 text-cyan-400"
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.5 }}
+            >
               <Code2 className="w-5 h-5" />
-            </div>
-            <h2 className="text-2xl font-bold text-white">{title}</h2>
+            </motion.div>
+            <h2 className="text-2xl font-bold text-white group-hover:gradient-text transition-all duration-300">{title}</h2>
           </div>
 
           {/* Status badges */}

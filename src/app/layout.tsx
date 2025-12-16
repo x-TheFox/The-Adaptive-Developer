@@ -15,6 +15,8 @@ import { Observer } from "@/components/ui/Observer";
 import { MobilePrompt } from "@/components/ui/MobilePrompt";
 import { ChatWidget } from "@/components/chat/ChatWidget";
 import { DevTools } from "@/components/ui/DevTools";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { SmoothScroll } from "@/components/ui/SmoothScroll";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -53,9 +55,6 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  // Explicitly configure the site's icons to ensure the browser uses
-  // /favicon.ico instead of any image in /public that might otherwise be
-  // used as the favicon (e.g. vercel.svg).
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
@@ -77,37 +76,40 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // FEATURE FLAG: The ChatWidget is disabled by default. To temporarily re-enable set
-  // the environment variable NEXT_PUBLIC_CHAT_ENABLED=true, then rebuild.
-  // This avoids shipping the chat to users in case we need it off temporarily.
   const CHAT_ENABLED = process.env.NEXT_PUBLIC_CHAT_ENABLED === 'true';
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100`}
+        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-zinc-950 text-zinc-100`}
       >
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <PersonaProvider>
-          {/* GDPR Consent Banner */}
-          <ConsentBanner />
+          <SmoothScroll>
+            <CustomCursor />
 
-          {/* Behavior Tracking (only active after consent) */}
-          <BehaviorTracker />
+            <ConsentBanner />
 
-          {/* Main Content */}
-          <main className="min-h-screen">{children}</main>
+            <BehaviorTracker />
 
-          {/* Persona Adaptation Indicator */}
-          <Observer />
+            <main className="min-h-screen relative">
+              {children}
+            </main>
 
-          {/* Mobile Desktop Prompt */}
-          <MobilePrompt />
+            <Observer />
 
-          {/* AI Chat Widget (temporarily disabled by default) */}
-          {CHAT_ENABLED && <ChatWidget />}
+            <MobilePrompt />
 
-          {/* Dev Tools (only in development) */}
-          <DevTools />
+            {CHAT_ENABLED && <ChatWidget />}
+
+            <DevTools />
+          </SmoothScroll>
         </PersonaProvider>
         <SpeedInsights />
         <Analytics />

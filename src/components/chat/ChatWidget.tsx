@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { usePersona } from '@/hooks/usePersona';
+import { MarkdownRenderer } from '@/components/ui/MarkdownRenderer';
 import { 
   MessageSquare, 
   X, 
@@ -306,26 +307,56 @@ function ChatMessage({ message }: { message: Message }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       className={cn('flex gap-3', isUser && 'flex-row-reverse')}
     >
       {/* Avatar */}
-      <div className={cn(
-        'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
-        isUser ? 'bg-zinc-700' : 'bg-blue-600'
-      )}>
+      <motion.div 
+        className={cn(
+          'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative',
+          isUser ? 'bg-gradient-to-br from-zinc-600 to-zinc-700' : 'bg-gradient-to-br from-cyan-500 to-blue-600'
+        )}
+        whileHover={{ scale: 1.1 }}
+      >
+        {!isUser && (
+          <motion.div
+            className="absolute inset-0 rounded-full bg-cyan-400/30"
+            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        )}
         {isUser ? <User size={16} /> : <Bot size={16} />}
-      </div>
+      </motion.div>
 
       {/* Content */}
       <div className={cn(
-        'max-w-[80%] px-3 py-2 rounded-lg',
-        isUser ? 'bg-zinc-700 text-white' : 'bg-zinc-800 text-zinc-200'
+        'max-w-[80%] px-3 py-2 rounded-xl relative overflow-hidden',
+        isUser 
+          ? 'bg-gradient-to-br from-zinc-700 to-zinc-800 text-white' 
+          : 'bg-gradient-to-br from-zinc-800/90 to-zinc-900/90 text-zinc-200 border border-zinc-700/50'
       )}>
-        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+        {!isUser && (
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-purple-500/5" />
+        )}
+        <div className="relative chat-message-content">
+          {isUser ? (
+            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+          ) : (
+            <ChatMarkdown content={message.content} />
+          )}
+        </div>
       </div>
     </motion.div>
+  );
+}
+
+function ChatMarkdown({ content }: { content: string }) {
+  return (
+    <div className="text-sm prose prose-sm prose-invert max-w-none prose-p:my-1 prose-p:leading-relaxed prose-headings:my-2 prose-pre:my-2 prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-700/50 prose-code:text-cyan-300 prose-code:bg-zinc-800/80 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-a:text-cyan-400 prose-strong:text-white prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5">
+      <MarkdownRenderer content={content} compact />
+    </div>
   );
 }
 

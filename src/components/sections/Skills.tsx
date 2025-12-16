@@ -179,7 +179,7 @@ export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
     <section
       id="skills"
       data-section="skills"
-      className={cn('py-24 px-6 bg-zinc-900/30', className)}
+      className={cn('py-24 px-6 relative overflow-hidden', className)}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
@@ -190,7 +190,7 @@ export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold gradient-text-animated mb-4">
             {config.title}
           </h2>
           <p className="text-zinc-400 text-lg">
