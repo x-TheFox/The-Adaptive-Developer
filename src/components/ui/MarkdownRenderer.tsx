@@ -27,7 +27,7 @@ export function MarkdownRenderer({ content, className, compact = false }: Markdo
         'prose-a:text-cyan-400 prose-a:no-underline hover:prose-a:underline prose-a:transition-colors',
         'prose-strong:text-white prose-strong:font-semibold',
         'prose-em:text-zinc-200 prose-em:italic',
-        'prose-code:text-cyan-300 prose-code:bg-zinc-800/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none',
+        // removed inline prose-code styles to let the custom inline code component control styling
         'prose-pre:bg-zinc-900/90 prose-pre:border prose-pre:border-zinc-700/50 prose-pre:rounded-xl prose-pre:shadow-lg prose-pre:shadow-cyan-500/5',
         'prose-blockquote:border-l-cyan-500 prose-blockquote:bg-zinc-800/30 prose-blockquote:rounded-r-lg prose-blockquote:py-1',
         'prose-ul:text-zinc-300 prose-ol:text-zinc-300',

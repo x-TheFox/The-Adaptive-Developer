@@ -97,7 +97,7 @@ export function NotionRenderer({ blocks, className }: NotionRendererProps) {
       'prose-p:text-zinc-300 prose-p:leading-relaxed',
       'prose-a:text-yellow-400 prose-a:no-underline hover:prose-a:underline',
       'prose-strong:text-white prose-strong:font-semibold',
-      'prose-code:text-yellow-400 prose-code:bg-zinc-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none',
+      // removed inline prose-code styles to allow inline code components to style themselves
       className
     )}>
       {renderBlocksWithLists(blocks)}
