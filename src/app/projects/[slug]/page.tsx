@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { getProjectBySlug, getAllProjectSlugs, getProjects } from '@/lib/notion/projects';
 import { NotionRenderer } from '@/components/notion';
 import { RepoCard } from '@/components/projects/RepoCard';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, Calendar, Clock, ExternalLink, Github, Sparkles, Users } from 'lucide-react';
@@ -55,7 +56,8 @@ export default async function ProjectPage({
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
       <div className="relative">
         {/* Background gradient */}
@@ -223,5 +225,6 @@ export default async function ProjectPage({
         </div>
       </footer>
     </main>
+    </HeavyPageWrapper>
   );
 }
