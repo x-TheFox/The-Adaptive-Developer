@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { getProjects, Project } from '@/lib/notion/projects';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ArrowRight, ArrowLeft, Filter, Folder, Search, Sparkles } from 'lucide-react';
@@ -34,7 +35,8 @@ export default async function ProjectsPage({
   const regularProjects = projects.filter(p => !p.featured);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Header */}
       <header className="relative overflow-hidden border-b border-zinc-800">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
@@ -152,6 +154,7 @@ export default async function ProjectsPage({
         )}
       </div>
     </main>
+    </HeavyPageWrapper>
   );
 }
 

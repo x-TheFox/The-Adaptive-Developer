@@ -16,6 +16,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { DiagramLink } from './DiagramLink';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 
 // ISR with 5-minute revalidation
 export const revalidate = 300;
@@ -70,7 +71,8 @@ export default async function ArchitecturePage({
   const featuredDocs = docs.filter(d => d.featured);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Header */}
       <header className="relative overflow-hidden border-b border-zinc-800">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5" />
@@ -199,6 +201,7 @@ export default async function ArchitecturePage({
         )}
       </div>
     </main>
+    </HeavyPageWrapper>
   );
 }
 

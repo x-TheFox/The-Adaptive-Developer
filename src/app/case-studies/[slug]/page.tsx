@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { CaseStudy } from '@/lib/notion/case-studies';
 import { CaseStudyPdfViewer } from './CaseStudyPdfViewer';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 
 // ISR with 5-minute revalidation
 export const revalidate = 300;
@@ -83,7 +84,8 @@ export default async function CaseStudyPage({
     .slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
       <div className="relative">
         {/* Background gradient */}
@@ -273,5 +275,6 @@ export default async function CaseStudyPage({
         </div>
       </footer>
     </main>
+    </HeavyPageWrapper>
   );
 }

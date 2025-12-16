@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ArchitectureDoc } from '@/lib/notion/architecture';
 import { ArchitectureDiagramViewer } from './ArchitectureDiagramViewer';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 
 // ISR with 5-minute revalidation
 export const revalidate = 300;
@@ -79,7 +80,8 @@ export default async function ArchitectureDocPage({
     .slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
       <div className="relative">
         {/* Background gradient */}
@@ -273,5 +275,6 @@ export default async function ArchitectureDocPage({
         </div>
       </footer>
     </main>
+    </HeavyPageWrapper>
   );
 }

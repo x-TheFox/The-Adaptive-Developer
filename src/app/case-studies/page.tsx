@@ -17,6 +17,7 @@ import {
   Briefcase,
   Layers
 } from 'lucide-react';
+import { HeavyPageWrapper } from '@/components/animations/HeavyPageWrapper';
 
 // ISR with 5-minute revalidation
 export const revalidate = 300;
@@ -76,7 +77,8 @@ export default async function CaseStudiesPage({
   const featuredStudies = caseStudies.filter(cs => cs.featured);
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white">
+    <HeavyPageWrapper>
+      <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Header */}
       <header className="relative overflow-hidden border-b border-zinc-800">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5" />
@@ -226,6 +228,7 @@ export default async function CaseStudiesPage({
         )}
       </div>
     </main>
+    </HeavyPageWrapper>
   );
 }
 
