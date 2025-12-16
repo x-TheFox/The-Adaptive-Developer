@@ -40,6 +40,18 @@ export default async function ProjectPage({
     .filter(p => p.category === project.category && p.id !== project.id)
     .slice(0, 3);
 
+  // Fetch GitHub repo metadata if available
+  let repoMeta = null;
+  if (project.githubUrl) {
+    try {
+      const meta = await import('@/lib/github').then(m => m.fetchRepoMetaFromUrl(project.githubUrl));
+      repoMeta = meta;
+    } catch (err) {
+      // Ignore fetch errors - we'll render a simple link instead
+      repoMeta = null;
+    }
+  }
+
   return (
     <main className="min-h-screen bg-zinc-950 text-white">
       {/* Hero Section */}
@@ -148,7 +160,13 @@ export default async function ProjectPage({
             <p className="text-zinc-500">This project doesn&apos;t have additional content yet.</p>
           </div>
         )}
-      </article>
+        {/* GitHub repo preview */}
+        {project.githubUrl && (
+          // @ts-expect-error server component import
+          <div className="mt-8">
+            <RepoCard githubUrl={project.githubUrl} repo={repoMeta} />
+          </div>
+        )}      </article>
 
       {/* Related Projects */}
       {relatedProjects.length > 0 && (
