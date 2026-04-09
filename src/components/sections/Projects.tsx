@@ -177,7 +177,7 @@ function ProjectCard({ project, config, index, isAdapting }: ProjectCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: isAdapting ? 0.5 : 1, y: 0, scale: 1 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       whileHover={{ 
         y: -8,
         transition: { type: 'spring', stiffness: 400, damping: 17 }
