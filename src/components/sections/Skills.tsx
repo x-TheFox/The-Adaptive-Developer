@@ -235,7 +235,7 @@ function SkillBars({ groups, config, isAdapting }: {
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: isAdapting ? 0.5 : 1, x: 0 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.28 }}
                 >
@@ -286,7 +286,7 @@ function SkillGrid({ groups, config, isAdapting }: {
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  whileInView={{ opacity: isAdapting ? 0.5 : 1, scale: 1, y: 0 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   whileHover={{ 
                     scale: 1.05, 
                     y: -5,
@@ -334,7 +334,7 @@ function SkillTags({ skills, isAdapting }: { skills: NormalizedSkill[]; isAdapti
         <motion.span
           key={skill.name}
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          whileInView={{ opacity: isAdapting ? 0.5 : 1, scale: 1, y: 0 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           whileHover={{ 
             scale: 1.1, 
             y: -3,
@@ -373,7 +373,7 @@ function SkillTree({ groups, config, isAdapting }: {
           <motion.div
             key={category}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: isAdapting ? 0.5 : 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
             whileHover={{ 
               scale: 1.02,
               transition: { type: 'spring', stiffness: 400 }

@@ -75,7 +75,7 @@ export function Contact({ email = 'hello@example.com', className }: ContactProps
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
-          whileInView={{ opacity: isAdapting ? 0.5 : 1, y: 0, scale: 1 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
           className={cn(
