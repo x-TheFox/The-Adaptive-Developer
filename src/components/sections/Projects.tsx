@@ -5,6 +5,7 @@ import { ExternalLink, Github, Play } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/types/persona';
 import { usePersona } from '@/hooks/usePersona';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 import { Project } from '@/lib/notion/projects';
 
 interface ProjectsGridProps {
@@ -80,6 +81,7 @@ const PERSONA_CARD_CONFIG: Record<PersonaType, {
 
 export function ProjectsGrid({ projects, className }: ProjectsGridProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
   const config = PERSONA_CARD_CONFIG[persona];
   const sortedProjects = sortProjectsForPersona(projects, persona);
 
@@ -97,13 +99,13 @@ export function ProjectsGrid({ projects, className }: ProjectsGridProps) {
       id="projects"
       data-section="projects"
       className={cn('py-24 px-6', className)}
+      ref={ref}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
@@ -146,7 +148,7 @@ export function ProjectsGrid({ projects, className }: ProjectsGridProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.45, delay: 0.15 }}
             className="text-center mt-12"
           >
             <motion.a
@@ -177,13 +179,12 @@ function ProjectCard({ project, config, index, isAdapting }: ProjectCardProps) {
   return (
     <motion.article
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: isAdapting ? 0.5 : 1, y: 0, scale: 1 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
       whileHover={{ 
         y: -8,
         transition: { type: 'spring', stiffness: 400, damping: 17 }
       }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.45, delay: index * 0.08 }}
       className={cn(
         'group relative glass rounded-xl overflow-hidden',
         'transition-all duration-500',

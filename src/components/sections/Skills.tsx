@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/types/persona';
 import { usePersona } from '@/hooks/usePersona';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface Skill {
   id?: string;
@@ -147,6 +148,7 @@ interface NormalizedSkill extends Skill {
 
 export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
   const config = PERSONA_SKILL_CONFIG[persona];
 
   // Normalize skills to have proper category type
@@ -180,13 +182,13 @@ export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
       id="skills"
       data-section="skills"
       className={cn('py-24 px-6 relative overflow-hidden', className)}
+      ref={ref}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
@@ -235,9 +237,9 @@ function SkillBars({ groups, config, isAdapting }: {
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: isAdapting ? 0.5 : 1, x: 0 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  transition={{ duration: 0.28 }}
                 >
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-zinc-300">{skill.name}</span>
@@ -251,7 +253,7 @@ function SkillBars({ groups, config, isAdapting }: {
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: index * 0.05 }}
+                      transition={{ duration: 0.6 }}
                       className={cn('h-full rounded-full', CATEGORY_COLORS[skill.normalizedCategory])}
                     />
                   </div>
@@ -286,15 +288,14 @@ function SkillGrid({ groups, config, isAdapting }: {
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  whileInView={{ opacity: isAdapting ? 0.5 : 1, scale: 1, y: 0 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   whileHover={{ 
                     scale: 1.05, 
                     y: -5,
                     transition: { type: 'spring', stiffness: 400, damping: 17 }
                   }}
                   whileTap={{ scale: 0.98 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.06 }}
+                  transition={{ duration: 0.34 }}
                   className={cn(
                     'p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50',
                     'hover:border-zinc-500 hover:bg-zinc-800/70 transition-colors cursor-default',
@@ -334,17 +335,15 @@ function SkillTags({ skills, isAdapting }: { skills: NormalizedSkill[]; isAdapti
         <motion.span
           key={skill.name}
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          whileInView={{ opacity: isAdapting ? 0.5 : 1, scale: 1, y: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           whileHover={{ 
             scale: 1.1, 
             y: -3,
             boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)'
           }}
           whileTap={{ scale: 0.95 }}
-          viewport={{ once: true }}
           transition={{ 
-            duration: 0.4, 
-            delay: index * 0.04,
+            duration: 0.35, 
             type: 'spring',
             stiffness: 300
           }}
@@ -374,12 +373,11 @@ function SkillTree({ groups, config, isAdapting }: {
           <motion.div
             key={category}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: isAdapting ? 0.5 : 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             whileHover={{ 
               scale: 1.02,
               transition: { type: 'spring', stiffness: 400 }
             }}
-            viewport={{ once: true }}
             transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
             className={cn(
               'p-6 rounded-xl bg-zinc-900/50 border border-zinc-800',

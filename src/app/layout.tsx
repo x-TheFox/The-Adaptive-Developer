@@ -91,7 +91,7 @@ export default function RootLayout({
       >
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <PersonaProvider>
-          <SmoothScroll>
+          {/* <SmoothScroll> Disabled: Lenis interferes with scroll reveal even with custom hook */}
             <CustomCursor />
 
             <ConsentBanner />
@@ -109,7 +109,7 @@ export default function RootLayout({
             {CHAT_ENABLED && <ChatWidget />}
 
             <DevTools />
-          </SmoothScroll>
+          {/* </SmoothScroll> */}
         </PersonaProvider>
         <SpeedInsights />
         <Analytics />
