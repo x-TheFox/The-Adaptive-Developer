@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/types/persona';
 import { usePersona } from '@/hooks/usePersona';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface Skill {
   id?: string;
@@ -147,6 +148,7 @@ interface NormalizedSkill extends Skill {
 
 export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
   const config = PERSONA_SKILL_CONFIG[persona];
 
   // Normalize skills to have proper category type
@@ -180,13 +182,13 @@ export function Skills({ skills = DEFAULT_SKILLS, className }: SkillsProps) {
       id="skills"
       data-section="skills"
       className={cn('py-24 px-6 relative overflow-hidden', className)}
+      ref={ref}
     >
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
@@ -286,14 +288,13 @@ function SkillGrid({ groups, config, isAdapting }: {
                 <motion.div
                   key={skill.name}
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   whileHover={{ 
                     scale: 1.05, 
                     y: -5,
                     transition: { type: 'spring', stiffness: 400, damping: 17 }
                   }}
                   whileTap={{ scale: 0.98 }}
-                  viewport={{ once: true }}
                   transition={{ duration: 0.34 }}
                   className={cn(
                     'p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50',
@@ -334,14 +335,13 @@ function SkillTags({ skills, isAdapting }: { skills: NormalizedSkill[]; isAdapti
         <motion.span
           key={skill.name}
           initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
           whileHover={{ 
             scale: 1.1, 
             y: -3,
             boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3)'
           }}
           whileTap={{ scale: 0.95 }}
-          viewport={{ once: true }}
           transition={{ 
             duration: 0.35, 
             type: 'spring',
@@ -373,12 +373,11 @@ function SkillTree({ groups, config, isAdapting }: {
           <motion.div
             key={category}
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             whileHover={{ 
               scale: 1.02,
               transition: { type: 'spring', stiffness: 400 }
             }}
-            viewport={{ once: true }}
             transition={{ duration: 0.5, delay: categoryIndex * 0.1 }}
             className={cn(
               'p-6 rounded-xl bg-zinc-900/50 border border-zinc-800',

@@ -5,6 +5,7 @@ import { Mail, MessageSquare, Calendar, Send, Briefcase, Coffee, Gamepad } from 
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/types/persona';
 import { usePersona } from '@/hooks/usePersona';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface ContactProps {
   email?: string;
@@ -64,6 +65,7 @@ const PERSONA_CONTACT_CONFIG: Record<PersonaType, {
 
 export function Contact({ email = 'hello@example.com', className }: ContactProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
   const config = PERSONA_CONTACT_CONFIG[persona];
 
   return (
@@ -71,12 +73,12 @@ export function Contact({ email = 'hello@example.com', className }: ContactProps
       id="contact"
       data-section="contact"
       className={cn('py-24 px-6', className)}
+      ref={ref}
     >
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.98 }}
           transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
           className={cn(
             'relative p-8 md:p-12 rounded-2xl overflow-hidden',
@@ -92,8 +94,7 @@ export function Contact({ email = 'hello@example.com', className }: ContactProps
               config.accent
             )}
             initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
+            animate={isRevealed ? { scaleX: 1 } : { scaleX: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             style={{ transformOrigin: 'left' }}
           />
@@ -124,8 +125,7 @@ export function Contact({ email = 'hello@example.com', className }: ContactProps
                 href={config.cta.href === 'mailto:' ? `mailto:${email}` : config.cta.href}
                 data-track="contact-cta-primary"
                 initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                 transition={{ delay: 0.4, duration: 0.4 }}
                 whileHover={{ 
                   scale: 1.05, 
@@ -149,8 +149,7 @@ export function Contact({ email = 'hello@example.com', className }: ContactProps
                   href={config.secondaryCta.href === 'mailto:' ? `mailto:${email}` : config.secondaryCta.href}
                   data-track="contact-cta-secondary"
                   initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                   transition={{ delay: 0.5, duration: 0.4 }}
                   whileHover={{ 
                     scale: 1.05,

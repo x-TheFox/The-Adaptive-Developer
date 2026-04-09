@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 import { Building2, Calendar, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { PersonaType } from '@/types/persona';
-import { usePersona } from '@/hooks/usePersona';
-
+import { usePersona } from '@/hooks/usePersona';import { useScrollReveal } from '@/hooks/useScrollReveal';
 interface Experience {
   id: string;
   company: string;
@@ -135,19 +134,20 @@ const PERSONA_EXP_CONFIG: Record<PersonaType, {
 
 export function Experience({ experiences = DEFAULT_EXPERIENCES, className }: ExperienceProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
   const config = PERSONA_EXP_CONFIG[persona];
 
   return (
     <section
       data-section="experience"
       className={cn('py-24 px-6', className)}
+      ref={ref}
     >
       <div className="max-w-4xl mx-auto">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
           className="mb-12"
         >
@@ -189,8 +189,7 @@ function ExperienceCard({ experience, config, index, isAdapting, isLast }: Exper
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="relative"
     >
