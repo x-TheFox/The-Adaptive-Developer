@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { 
   Calendar, Rocket, Smile, MapPin, Github, Linkedin, Twitter, Globe, Mail, Code2,
@@ -100,12 +100,9 @@ export function About({
   profile,
   className,
 }: AboutProps) {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
   return (
     <section
-      ref={sectionRef}
       id="about"
       data-section="about"
       className={cn('py-24 px-6 relative overflow-hidden', className)}
@@ -114,8 +111,8 @@ export function About({
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
-        animate={{ opacity: isInView ? 1 : 0 }}
-        transition={{ duration: 1 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent" />
       </motion.div>
@@ -124,8 +121,9 @@ export function About({
         {/* Card container */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
           className="relative p-8 md:p-12 rounded-2xl glass hover:border-cyan-500/30 transition-all duration-500 group"
         >
           {/* Decorative corner accent */}
@@ -148,8 +146,9 @@ export function About({
           {profile && (profile.location || profile.available) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
               className="flex flex-wrap gap-3 mb-8"
             >
               {profile.location && (
@@ -173,8 +172,9 @@ export function About({
               <motion.p
                 key={index}
                 initial={{ opacity: 0, y: 15 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.45, delay: 0.2 + index * 0.06 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: 0.15 + index * 0.05 }}
                 className="text-zinc-400 leading-relaxed"
               >
                 {paragraph}
@@ -186,8 +186,9 @@ export function About({
           {profile?.socialLinks && Object.keys(profile.socialLinks).length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
               className="flex gap-2 pt-4 border-t border-zinc-800"
             >
               {Object.entries(profile.socialLinks).map(([platform, url]) => (
@@ -211,16 +212,18 @@ export function About({
           {highlights.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
               className="grid grid-cols-3 gap-4 pt-8 mt-8 border-t border-zinc-800"
             >
               {highlights.map((highlight, index) => (
                 <motion.div
                   key={highlight.label}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.4 + index * 0.05 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.35 + index * 0.04 }}
                   className="text-center"
                 >
                   <div className="text-2xl font-bold text-white mb-1">{highlight.value}</div>

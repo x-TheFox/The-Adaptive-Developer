@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { usePersona } from '@/hooks/usePersona';
 import { cn } from '@/lib/utils';
@@ -102,8 +102,6 @@ export function Certificates({
   className 
 }: CertificatesProps) {
   const { persona, isAdapting } = usePersona();
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
   // Sort certificates based on persona
   const sortedCertificates = [...certificates].sort((a, b) => {
@@ -140,7 +138,6 @@ export function Certificates({
 
   return (
     <section
-      ref={sectionRef}
       id="certificates"
       data-section="certificates"
       className={cn(
@@ -152,8 +149,8 @@ export function Certificates({
       <motion.div
         className="absolute inset-0 -z-10"
         initial={{ opacity: 0 }}
-        animate={{ opacity: isInView ? 1 : 0 }}
-        transition={{ duration: 1 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent" />
         <motion.div
@@ -175,13 +172,15 @@ export function Certificates({
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55 }}
         >
           <motion.div
             initial={{ scale: 0 }}
-            animate={isInView ? { scale: 1 } : {}}
-            transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-500 text-sm font-medium mb-4"
           >
             <Award className="w-4 h-4" />
@@ -200,7 +199,8 @@ export function Certificates({
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          whileInView="visible"
+          viewport={{ once: true }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {sortedCertificates.map((cert, index) => (
