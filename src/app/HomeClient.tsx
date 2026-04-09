@@ -214,10 +214,11 @@ export default function HomeClient({ projects, about, profile, skills, certifica
         {sectionOrder.map((sectionKey, index) => (
           <motion.div
             key={sectionKey}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 35 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: index * 0.05 }}
+            style={{ willChange: 'opacity, transform' }}
           >
             {sections[sectionKey]}
           </motion.div>
