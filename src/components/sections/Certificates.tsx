@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { usePersona } from '@/hooks/usePersona';
 import { cn } from '@/lib/utils';
 import { Award, ExternalLink, Calendar, Building2 } from 'lucide-react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface Certificate {
   id: string;
@@ -102,6 +103,7 @@ export function Certificates({
   className 
 }: CertificatesProps) {
   const { persona, isAdapting } = usePersona();
+  const { ref, isRevealed } = useScrollReveal();
 
   // Sort certificates based on persona
   const sortedCertificates = [...certificates].sort((a, b) => {
@@ -144,6 +146,7 @@ export function Certificates({
         'py-24 px-6 relative overflow-hidden',
         className
       )}
+      ref={ref}
     >
       {/* Animated background gradient */}
       <motion.div
@@ -172,14 +175,12 @@ export function Certificates({
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.55 }}
         >
           <motion.div
             initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={{ once: true }}
+            animate={isRevealed ? { scale: 1 } : { scale: 0 }}
             transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-500 text-sm font-medium mb-4"
           >
@@ -197,16 +198,22 @@ export function Certificates({
 
         {/* Certificates grid */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+          initial={{ opacity: 0 }}
+          animate={isRevealed ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.3 }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {sortedCertificates.map((cert, index) => (
             <motion.div
               key={cert.id}
-              variants={itemVariants}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={isRevealed ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.95 }}
+              transition={{ 
+                type: 'spring',
+                stiffness: 100,
+                damping: 15,
+                delay: isRevealed ? 0.1 + index * 0.05 : 0,
+              }}
               whileHover={{ y: -8, scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className={cn(
@@ -223,8 +230,8 @@ export function Certificates({
               {cert.featured && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.15 + index * 0.04 }}
+                  animate={isRevealed ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                  transition={{ delay: 0.15 + (isRevealed ? index * 0.04 : 0) }}
                   className="absolute -top-3 -right-3 px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-full shadow-lg"
                 >
                   Featured

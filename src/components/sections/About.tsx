@@ -9,6 +9,7 @@ import {
   Monitor, Smartphone, Laptop, Terminal, FileCode, GitBranch, Package
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 interface Highlight {
   label: string;
@@ -100,12 +101,14 @@ export function About({
   profile,
   className,
 }: AboutProps) {
+  const { ref, isRevealed } = useScrollReveal();
 
   return (
     <section
       id="about"
       data-section="about"
       className={cn('py-24 px-6 relative overflow-hidden', className)}
+      ref={ref}
     >
       {/* Background gradient */}
       <motion.div
@@ -121,8 +124,7 @@ export function About({
         {/* Card container */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.55 }}
           className="relative p-8 md:p-12 rounded-2xl glass hover:border-cyan-500/30 transition-all duration-500 group"
         >
@@ -146,8 +148,7 @@ export function About({
           {profile && (profile.location || profile.available) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ delay: 0.1 }}
               className="flex flex-wrap gap-3 mb-8"
             >
@@ -172,8 +173,7 @@ export function About({
               <motion.p
                 key={index}
                 initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
                 transition={{ duration: 0.45, delay: 0.15 + index * 0.05 }}
                 className="text-zinc-400 leading-relaxed"
               >
@@ -186,8 +186,7 @@ export function About({
           {profile?.socialLinks && Object.keys(profile.socialLinks).length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
               transition={{ delay: 0.2 }}
               className="flex gap-2 pt-4 border-t border-zinc-800"
             >
@@ -212,8 +211,7 @@ export function About({
           {highlights.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              animate={isRevealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
               transition={{ delay: 0.3 }}
               className="grid grid-cols-3 gap-4 pt-8 mt-8 border-t border-zinc-800"
             >
@@ -221,8 +219,7 @@ export function About({
                 <motion.div
                   key={highlight.label}
                   initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
+                  animate={isRevealed ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
                   transition={{ delay: 0.35 + index * 0.04 }}
                   className="text-center"
                 >
