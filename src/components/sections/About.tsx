@@ -174,7 +174,7 @@ export function About({
                 key={index}
                 initial={{ opacity: 0, y: 15 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                transition={{ duration: 0.45, delay: 0.2 + index * 0.06 }}
                 className="text-zinc-400 leading-relaxed"
               >
                 {paragraph}
@@ -187,7 +187,7 @@ export function About({
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.25 }}
               className="flex gap-2 pt-4 border-t border-zinc-800"
             >
               {Object.entries(profile.socialLinks).map(([platform, url]) => (
@@ -212,7 +212,7 @@ export function About({
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.35 }}
               className="grid grid-cols-3 gap-4 pt-8 mt-8 border-t border-zinc-800"
             >
               {highlights.map((highlight, index) => (
@@ -220,7 +220,7 @@ export function About({
                   key={highlight.label}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.7 + index * 0.1 }}
+                  transition={{ delay: 0.4 + index * 0.05 }}
                   className="text-center"
                 >
                   <div className="text-2xl font-bold text-white mb-1">{highlight.value}</div>

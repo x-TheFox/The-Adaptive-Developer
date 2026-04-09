@@ -237,7 +237,7 @@ function SkillBars({ groups, config, isAdapting }: {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: isAdapting ? 0.5 : 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  transition={{ duration: 0.28 }}
                 >
                   <div className="flex justify-between mb-1">
                     <span className="text-sm text-zinc-300">{skill.name}</span>
@@ -251,7 +251,7 @@ function SkillBars({ groups, config, isAdapting }: {
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.level}%` }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.8, delay: index * 0.05 }}
+                      transition={{ duration: 0.6 }}
                       className={cn('h-full rounded-full', CATEGORY_COLORS[skill.normalizedCategory])}
                     />
                   </div>
@@ -294,7 +294,7 @@ function SkillGrid({ groups, config, isAdapting }: {
                   }}
                   whileTap={{ scale: 0.98 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.06 }}
+                  transition={{ duration: 0.34 }}
                   className={cn(
                     'p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/50',
                     'hover:border-zinc-500 hover:bg-zinc-800/70 transition-colors cursor-default',
@@ -343,8 +343,7 @@ function SkillTags({ skills, isAdapting }: { skills: NormalizedSkill[]; isAdapti
           whileTap={{ scale: 0.95 }}
           viewport={{ once: true }}
           transition={{ 
-            duration: 0.4, 
-            delay: index * 0.04,
+            duration: 0.35, 
             type: 'spring',
             stiffness: 300
           }}

@@ -224,7 +224,7 @@ export function Certificates({
                 <motion.div
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 + 0.3 }}
+                  transition={{ delay: 0.15 + index * 0.04 }}
                   className="absolute -top-3 -right-3 px-3 py-1 bg-blue-500 text-white text-xs font-medium rounded-full shadow-lg"
                 >
                   Featured
