@@ -122,6 +122,47 @@ export const architectureDocs = pgTable('architecture_docs', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// Projects - local additions/mappings
+export const projects = pgTable('projects', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  description: text('description'),
+  status: varchar('status', { length: 50 }).default('Not started').notNull(), // 'Not started' | 'In progress' | 'Done'
+  category: varchar('category', { length: 50 }).default('Other'),
+  priority: varchar('priority', { length: 50 }).default('medium'),
+  featured: boolean('featured').default(false),
+  techStack: jsonb('tech_stack').default([]), // string[]
+  team: jsonb('team').default([]), // string[]
+  repositoryUrl: text('repository_url'),
+  coverImage: text('cover_image'),
+  startDate: text('start_date'),
+  endDate: text('end_date'),
+  progress: integer('progress').default(0),
+  content: text('content'), // Markdown supported
+  sortOrder: integer('sort_order').default(0),
+  source: varchar('source', { length: 20 }).default('local').notNull(),
+  notionId: text('notion_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+// Now Pages - local additions
+export const nowPages = pgTable('now_pages', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  description: text('description'),
+  status: varchar('status', { length: 50 }).default('In progress').notNull(),
+  category: varchar('category', { length: 50 }),
+  content: text('content'), // Markdown supported
+  sortOrder: integer('sort_order').default(0),
+  source: varchar('source', { length: 20 }).default('local').notNull(),
+  notionId: text('notion_id'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
 // Admin sessions for authentication
 export const adminSessions = pgTable('admin_sessions', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -157,6 +198,10 @@ export type ArchitectureDocRecord = typeof architectureDocs.$inferSelect;
 export type NewArchitectureDocRecord = typeof architectureDocs.$inferInsert;
 export type AdminSession = typeof adminSessions.$inferSelect;
 export type NewAdminSession = typeof adminSessions.$inferInsert;
+export type ProjectRecord = typeof projects.$inferSelect;
+export type NewProjectRecord = typeof projects.$inferInsert;
+export type NowPageRecord = typeof nowPages.$inferSelect;
+export type NewNowPageRecord = typeof nowPages.$inferInsert;
 export type SyncLogEntry = typeof syncLog.$inferSelect;
 export type NewSyncLogEntry = typeof syncLog.$inferInsert;
 
