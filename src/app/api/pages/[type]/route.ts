@@ -71,7 +71,7 @@ export async function POST(
       databaseId = process.env.NOTION_PROJECTS_DATABASE_ID!;
       props = {
         'Project name': { title: [{ text: { content: body.title } }] },
-        'Slug': { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\\s+/g, '-') } }] },
+        'Slug': { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\+/g, '-') } }] },
         'Description': { rich_text: [{ text: { content: body.description || '' } }] },
         'Status': { status: { name: body.status || (type === 'now' ? 'In progress' : 'Not started') } },
         'Category': { select: { name: body.category || 'Other' } },
@@ -79,12 +79,12 @@ export async function POST(
       };
     } else if (type === 'architecture') {
       databaseId = process.env.NOTION_ARCHITECTURE_DATABASE_ID!;
-      props['Slug'] = { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\\s+/g, '-') } }] };
+      props['Slug'] = { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\+/g, '-') } }] };
       props['Description'] = { rich_text: [{ text: { content: body.description || '' } }] };
       props['Type'] = { select: { name: body.type || 'system-design' } };
     } else if (type === 'case-studies') {
       databaseId = process.env.NOTION_CASE_STUDIES_DATABASE_ID!;
-      props['Slug'] = { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\\s+/g, '-') } }] };
+      props['Slug'] = { rich_text: [{ text: { content: body.slug || body.title.toLowerCase().replace(/\+/g, '-') } }] };
       props['Description'] = { rich_text: [{ text: { content: body.description || '' } }] };
       props['Industry'] = { select: { name: body.industry || 'tech' } };
       props['Type'] = { select: { name: body.type || 'full-project' } };
@@ -92,7 +92,7 @@ export async function POST(
       return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
     }
 
-    if (!databaseId) throw new Error(\`Database ID for \${type} not configured\`);
+    if (!databaseId) throw new Error(`Database ID for ${type} not configured`);
 
     // 1. Create in Notion
     notionResponse = await notion.pages.create({
@@ -102,7 +102,7 @@ export async function POST(
     });
 
     const notionId = notionResponse.id;
-    const commonSlug = body.slug || body.title.toLowerCase().replace(/\\s+/g, '-');
+    const commonSlug = body.slug || body.title.toLowerCase().replace(/\+/g, '-');
 
     // 2. Dual Write to Postgres
     if (type === 'projects') {
@@ -156,7 +156,7 @@ export async function POST(
     }
 
     return NextResponse.json({
-      message: \`Successfully created \${type} item\`,
+      message: `Successfully created ${type} item`,
       notionId,
       slug: commonSlug,
     });
