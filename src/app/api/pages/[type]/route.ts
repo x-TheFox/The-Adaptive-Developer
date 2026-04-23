@@ -107,61 +107,73 @@ export async function POST(
     const commonSlug = body.slug || body.title.toLowerCase().replace(/\+/g, '-');
 
     // 2. Dual Write to Postgres
-    if (type === 'projects') {
-      await db.insert(projects).values({
-        id: uuidv4(),
-        slug: commonSlug,
-        title: body.title,
-        description: body.description,
-        status: body.status || 'Not started',
-        category: body.category || 'Other',
-        content: body.content,
-        priority: body.priority || 'medium',
-        source: 'notion',
-        notionId,
-      }).onConflictDoNothing();
-    } else if (type === 'now') {
-      await db.insert(nowPages).values({
-        id: uuidv4(),
-        slug: commonSlug,
-        title: body.title,
-        description: body.description,
-        status: body.status || 'In progress',
-        category: body.category,
-        content: body.content,
-        source: 'notion',
-        notionId,
-      }).onConflictDoNothing();
-    } else if (type === 'architecture') {
-      await db.insert(architectureDocs).values({
-        id: uuidv4(),
-        slug: commonSlug,
-        title: body.title,
-        description: body.description,
-        type: body.type || 'system-design',
-        content: body.content,
-        source: 'notion',
-        notionId,
-      }).onConflictDoNothing();
-    } else if (type === 'case-studies') {
-      await db.insert(caseStudies).values({
-        id: uuidv4(),
-        slug: commonSlug,
-        title: body.title,
-        description: body.description,
-        industry: body.industry || 'tech',
-        type: body.type || 'full-project',
-        content: body.content,
-        source: 'notion',
-        notionId,
-      }).onConflictDoNothing();
+    let dbStatus = 'success';
+    let dbError = null;
+
+    try {
+      if (type === 'projects') {
+        await db.insert(projects).values({
+          id: uuidv4(),
+          slug: commonSlug,
+          title: body.title,
+          description: body.description,
+          status: body.status || 'Not started',
+          category: body.category || 'Other',
+          content: body.content || '',
+          priority: body.priority || 'medium',
+          source: 'notion',
+          notionId,
+        }).onConflictDoNothing({ target: projects.slug });
+      } else if (type === 'now') {
+        await db.insert(nowPages).values({
+          id: uuidv4(),
+          slug: commonSlug,
+          title: body.title,
+          description: body.description,
+          status: body.status || 'In progress',
+          category: body.category || 'Other',
+          content: body.content || '',
+          source: 'notion',
+          notionId,
+        }).onConflictDoNothing({ target: nowPages.slug });
+      } else if (type === 'architecture') {
+        await db.insert(architectureDocs).values({
+          id: uuidv4(),
+          slug: commonSlug,
+          title: body.title,
+          description: body.description,
+          type: body.type || 'system-design',
+          content: body.content || '',
+          source: 'notion',
+          notionId,
+        }).onConflictDoNothing({ target: architectureDocs.slug });
+      } else if (type === 'case-studies') {
+        await db.insert(caseStudies).values({
+          id: uuidv4(),
+          slug: commonSlug,
+          title: body.title,
+          description: body.description,
+          industry: body.industry || 'tech',
+          type: body.type || 'full-project',
+          content: body.content || '',
+          source: 'notion',
+          notionId,
+        }).onConflictDoNothing({ target: caseStudies.slug });
+      }
+    } catch (e: any) {
+      console.error('Postgres Sync Failure:', e);
+      dbStatus = 'error';
+      dbError = e.message || String(e);
     }
 
     return NextResponse.json({
-      message: `Successfully created ${type} item`,
+      message: `Successfully created ${type} item in Notion`,
       notionId,
       slug: commonSlug,
-    });
+      dbStatus,
+      dbError
+    }, { status: dbStatus === 'error' ? 207 : 200 }); // 207 Multi-Status if Notion passed but DB failed
+
   } catch (error: any) {
     console.error('Notion API/DB error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
