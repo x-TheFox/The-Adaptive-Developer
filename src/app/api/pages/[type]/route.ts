@@ -15,11 +15,12 @@ type PageType = 'projects' | 'now' | 'architecture' | 'case-studies';
 
 export async function GET(
   request: Request,
-  { params }: { params: { type: string } }
+  { params }: { params: Promise<{ type: string }> }
 ) {
   if (!validateApiKey(request)) return unauthorizedResponse();
 
-  const type = params.type as PageType;
+  const resolvedParams = await params;
+  const type = resolvedParams.type as PageType;
   
   try {
     let data;
@@ -47,11 +48,12 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { type: string } }
+  { params }: { params: Promise<{ type: string }> }
 ) {
   if (!validateApiKey(request)) return unauthorizedResponse();
 
-  const type = params.type as PageType;
+  const resolvedParams = await params;
+  const type = resolvedParams.type as PageType;
   const body = await request.json();
 
   if (!body.title) {
